@@ -37,3 +37,15 @@ class DataPreprocessingConfig:
 
     def get_data_preprocessing_config(self):
         return self.__dict__
+
+
+class ModelConfig:
+    def __init__(self):
+        self.LABEL = 101
+        self.STORE_PATH = os.path.join(from_root(), "model", "benchmark")
+        self.REPOSITORY = 'pytorch/vision:v0.10.0'
+        self.BASEMODEL = 'resnet18'
+        self.PRETRAINED = True
+
+    def get_model_config(self):
+        return self.__dict__
