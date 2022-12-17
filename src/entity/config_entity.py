@@ -49,3 +49,13 @@ class ModelConfig:
 
     def get_model_config(self):
         return self.__dict__
+
+    
+class TrainerConfig:
+    def __init__(self):
+        self.MODEL_STORE_PATH = os.path.join(from_root(), "model", "finetuned", "model.pth")
+        self.EPOCHS = 2
+        self.Evaluation = True
+
+    def get_trainer_config(self):
+        return self.__dict__
