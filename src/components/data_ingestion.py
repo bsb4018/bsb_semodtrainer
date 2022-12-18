@@ -3,11 +3,15 @@ from src.utils.storage_handler import S3Connector
 from from_root import from_root
 import splitfolders
 import os
-
+import sys
+from exception.custom_exception import TrainModelException
 
 class DataIngestion:
     def __init__(self):
-        self.config = DataIngestionConfig()
+        try:
+            self.config = DataIngestionConfig()
+        except Exception as e:
+            raise TrainModelException(e,sys)
 
     def download_dir(self):
         """
@@ -25,7 +29,7 @@ class DataIngestion:
             print("\n====================== Fetching Completed ==========================\n")
 
         except Exception as e:
-            raise e
+            raise TrainModelException(e,sys)
 
     def split_data(self):
         """
@@ -41,23 +45,28 @@ class DataIngestion:
                 group_prefix=None, move=False
             )
         except Exception as e:
-            raise e
+            raise TrainModelException(e,sys)
 
     def run_step(self):
-        self.download_dir()
-        self.split_data()
-        return {"Response": "Completed Data Ingestion"}
-
+        try:
+            self.download_dir()
+            self.split_data()
+            return {"Response": "Completed Data Ingestion"}
+        except Exception as e:
+            raise TrainModelException(e,sys)
 
 if __name__ == "__main__":
-    paths = ["data", r"data\raw", r"data\splitted", r"data\embeddings",
-             "model", r"model\benchmark", r"model\finetuned"]
+    try:
+        paths = ["data", r"data\raw", r"data\splitted", r"data\embeddings",
+                 "model", r"model\benchmark", r"model\finetuned"]
 
-    for folder in paths:
-        path = os.path.join(from_root(), folder)
-        print(path)
-        if not os.path.exists(path):
-            os.mkdir(folder)
+        for folder in paths:
+            path = os.path.join(from_root(), folder)
+            print(path)
+            if not os.path.exists(path):
+                os.mkdir(folder)
 
-    dc = DataIngestion()
-    print(dc.run_step())
+        dc = DataIngestion()
+        print(dc.run_step())
+    except Exception as e:
+        raise TrainModelException(e,sys)

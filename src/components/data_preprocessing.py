@@ -3,11 +3,15 @@ from torchvision.datasets import ImageFolder
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
-
+import sys
+from exception.custom_exception import TrainModelException
 
 class DataPreprocessing:
     def __init__(self):
-        self.config = DataPreprocessingConfig()
+        try:
+            self.config = DataPreprocessingConfig()
+        except Exception as e:
+            raise TrainModelException(e,sys)
 
     def transformations(self):
         try:
@@ -25,7 +29,7 @@ class DataPreprocessing:
 
             return TRANSFORM_IMG
         except Exception as e:
-            raise e
+            raise TrainModelException(e,sys)
 
     def create_loaders(self, TRANSFORM_IMG):
         """
@@ -55,7 +59,7 @@ class DataPreprocessing:
                 }
             return result
         except Exception as e:
-            raise e
+            raise TrainModelException(e,sys)
 
     def run_step(self):
         try:
@@ -67,11 +71,15 @@ class DataPreprocessing:
             result = self.create_loaders(TRANSFORM_IMG)
             return result
         except Exception as e:
-            raise e
+            raise TrainModelException(e,sys)
 
 
 if __name__ == "__main__":
-    dp = DataPreprocessing()
-    loaders = dp.run_step()
-    for i in loaders["train_data_loader"][0]:
-        break
+    try:
+        dp = DataPreprocessing()
+        loaders = dp.run_step()
+        for i in loaders["train_data_loader"][0]:
+            break
+
+    except Exception as e:
+            raise TrainModelException(e,sys)

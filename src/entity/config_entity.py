@@ -59,3 +59,46 @@ class TrainerConfig:
 
     def get_trainer_config(self):
         return self.__dict__
+
+
+class ImageFolderConfig:
+    def __init__(self):
+        self.ROOT_DIR = os.path.join(from_root(), "data", "raw", "images")
+        self.IMAGE_SIZE = 256
+        self.LABEL_MAP = {}
+        self.BUCKET: str = "image-database-system-01"
+        self.S3_LINK = "https://{0}.s3.ap-south-1.amazonaws.com/images/{1}/{2}"
+
+    def get_image_folder_config(self):
+        return self.__dict__
+
+
+class EmbeddingsConfig:
+    def __init__(self):
+        self.MODEL_STORE_PATH = os.path.join(from_root(), "model", "finetuned", "model.pth")
+
+    def get_embeddings_config(self):
+        return self.__dict__
+
+
+class AnnoyConfig:
+    def __init__(self):
+        self.EMBEDDING_STORE_PATH = os.path.join(from_root(), "data", "embeddings", "embeddings.ann")
+
+    def get_annoy_config(self):
+        return self.__dict__
+
+class s3Config:
+    def __init__(self):
+        self.ACCESS_KEY_ID = os.environ["ACCESS_KEY_ID"]
+        self.SECRET_KEY = os.environ["AWS_SECRET_KEY"]
+        self.REGION_NAME = "ap-south-1"
+        self.BUCKET_NAME = "image-database-system-01"
+        self.KEY = "model"
+        self.ZIP_NAME = "artifacts.tar.gz"
+        self.ZIP_PATHS = [(os.path.join(from_root(), "data", "embeddings", "embeddings.json"), "embeddings.json"),
+                          (os.path.join(from_root(), "data", "embeddings", "embeddings.ann"), "embeddings.ann"),
+                          (os.path.join(from_root(), "model", "finetuned", "model.pth"), "model.pth")]
+
+    def get_s3_config(self):
+        return self.__dict__
