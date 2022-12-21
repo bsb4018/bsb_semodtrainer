@@ -1,4 +1,5 @@
 from src.entity.config_entity import ModelConfig
+from src.utils.database_handler import MongoDBClient
 from torch import nn
 import torch
 import sys
@@ -9,12 +10,14 @@ class NeuralNet(nn.Module):
         try:
             super().__init__()
             self.config = ModelConfig()
+            self.mongo = MongoDBClient()
             self.base_model = self.get_model()
+            self.labels = self.mongo.get_number_of_labels()
             self.conv1 = nn.Conv2d(512, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
             self.conv2 = nn.Conv2d(32, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
             self.conv3 = nn.Conv2d(16, 4, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
             self.flatten = nn.Flatten()
-            self.final = nn.Linear(4 * 8 * 8, self.config.LABEL)
+            self.final = nn.Linear(4 * 8 * 8, self.labels)
         except Exception as e:
             raise TrainModelException(e,sys)
 

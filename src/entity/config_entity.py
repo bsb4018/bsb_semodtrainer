@@ -9,6 +9,7 @@ class DatabaseConfig:
         self.URL: str = "mongodb+srv://<username>:<password>@imagesecluster.pemlurn.mongodb.net/?retryWrites=true&w=majority"
         self.DBNAME: str = "ReverseImageSearchEngine"
         self.COLLECTION: str = "Embeddings"
+        self.LABELS: str = "labels"
 
     def get_database_config(self):
         return self.__dict__
@@ -41,7 +42,7 @@ class DataPreprocessingConfig:
 
 class ModelConfig:
     def __init__(self):
-        self.LABEL = 101
+        #self.LABEL = 101
         self.STORE_PATH = os.path.join(from_root(), "model", "benchmark")
         self.REPOSITORY = 'pytorch/vision:v0.10.0'
         self.BASEMODEL = 'resnet18'

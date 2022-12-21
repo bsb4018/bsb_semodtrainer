@@ -38,6 +38,15 @@ class MongoDBClient(object):
         except Exception as e:
             raise e
 
+    def get_number_of_labels(self):
+        try:
+            db = self.client[self.config.DBNAME]
+            collection = self.config.LABELS
+            return db[collection].count()
+        except Exception as e:
+            raise e
+
+
 
 if __name__ == "__main__":
     data = [
